@@ -82,6 +82,30 @@ $(document).ready(function (){
 	/* Blog
 	-----------------------------------------------------*/
 
+	/* Cards
+	-----------------------------------------------------*/
+
+	$(document).on('click.card', '.card', function (e) {
+	  if ($(this).find('> .card-reveal').length) {
+		if ($(e.target).is($('.card-reveal .card-title')) || $(e.target).is($('.card-reveal .card-title i'))) {
+		  // Make Reveal animate down and display none
+		  $(this).find('.card-reveal').velocity(
+			{translateY: 0}, {
+			  duration: 225,
+			  queue: false,
+			  easing: 'easeInOutQuad',
+			  complete: function() { $(this).css({ display: 'none'}); }
+			}
+		  );
+		}
+		else if ($(e.target).is($('.card .activator')) ||
+				 $(e.target).is($('.card .activator i')) ) {
+		  $(e.target).closest('.card').css('overflow', 'hidden');
+		  $(this).find('.card-reveal').css({ display: 'block'}).velocity("stop", false).velocity({translateY: '-100%'}, {duration: 300, queue: false, easing: 'easeInOutQuad'});
+		}
+	  }
+	});
+
 	// Post Carousel
 
 	$(".post-carousel").owlCarousel({
@@ -167,8 +191,7 @@ $(document).ready(function (){
 	/* Smooth Scrolling
 	-----------------------------------------------------*/
 
-	$.localScroll({
-	});
+
 
 	/* Contact
 	-----------------------------------------------------*/
@@ -187,7 +210,7 @@ $(document).ready(function (){
 
 	/* Animations
 	-----------------------------------------------------*/
-    var timelineBlocks = $('.cd-timeline-block'),
+    var timelineBlocks = $('.cd-timeline-block, .timeline-event'),
     offset = 0.8;
 
 //hide timeline blocks which are outside the viewport
@@ -201,14 +224,14 @@ $(window).on('scroll', function(){
 });
 
 function hideBlocks(blocks, offset) {
-    blocks.each(function(){
-        ( $(this).offset().top > $(window).scrollTop()+$(window).height()*offset ) && $(this).find('.cd-timeline-img, .cd-timeline-content').addClass('is-hidden');
+    blocks.each(function(){		
+        ( $(this).offset().top > $(window).scrollTop()+$(window).height()*offset ) && $(this).find('.cd-timeline-img, .cd-timeline-content, .timeline-badge').addClass('is-hidden');
     });
 }
 
 function showBlocks(blocks, offset) {
     blocks.each(function(){
-        ( $(this).offset().top <= $(window).scrollTop()+$(window).height()*offset && $(this).find('.cd-timeline-img').hasClass('is-hidden') ) && $(this).find('.cd-timeline-img, .cd-timeline-content').removeClass('is-hidden').addClass('bounce-in');
+        ( $(this).offset().top <= $(window).scrollTop()+$(window).height()*offset && $(this).find('.cd-timeline-img, .timeline-badge').hasClass('is-hidden') ) && $(this).find('.cd-timeline-img, .cd-timeline-content, .timeline-badge').removeClass('is-hidden').addClass('bounce-in');
     });
 }
 	jQuery('.animated').appear();
